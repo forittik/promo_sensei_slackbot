@@ -1,0 +1,11 @@
+# requirements.txt
+playwright
+beautifulsoup4 # For parsing HTML if needed, Playwright can also handle DOM
+openai
+faiss-cpu # Or chromadb
+python-dotenv
+slack_bolt # If using Slackbot
+tiktoken # For token counting
+
+
+#playwright install
