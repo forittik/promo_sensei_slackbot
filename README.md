@@ -1,61 +1,44 @@
-Promo Sensei: Your AI-Powered Promotional Offer Assistant
+# Promo Sensei: Your AI-Powered Promotional Offer Assistant
+
 Promo Sensei is an intelligent system designed to scrape promotional offers from various e-commerce websites, store them in a vector database, and provide an interface (via CLI or Slackbot) to query, summarize, and retrieve these offers using a Large Language Model (LLM) with Retrieval-Augmented Generation (RAG).
 
-Table of Contents
-Features
+## Table of Contents
 
-Project Structure
+1.  [Features](#features)
+2.  [Project Structure](#project-structure)
+3.  [Initial Setup](#initial-setup)
+    * [Prerequisites](#prerequisites)
+    * [API Keys and Environment Variables](#api-keys-and-environment-variables)
+    * [Install Dependencies](#install-dependencies)
+4.  [Configuration (`config.py`)](#configuration-configpy)
+5.  [How It Works](#how-it-works)
+    * [Web Scraping (`scraper.py`)](#web-scraping-scraperpy)
+    * [Data Ingestion and Vector Database (`ingest_to_vector_db.py`)](#data-ingestion-and-vector-database-ingest_to_vector_dbpy)
+    * [RAG Query Processing (`rag_query.py`)](#rag-query-processing-rag_querypy)
+    * [Slackbot Integration (`slackbot.py`)](#slackbot-integration-slackbotpy)
+6.  [Usage](#usage)
+    * [Step 1: Ingest Data](#step-1-ingest-data)
+    * [Step 2: Run RAG Queries (CLI)](#step-2-run-rag-queries-cli)
+    * [Step 3: Run the Slackbot](#step-3-run-the-slackbot)
+7.  [Slackbot Commands](#slackbot-commands)
+8.  [Logging](#logging)
+9.  [Future Enhancements](#future-enhancements)
 
-Initial Setup
+---
 
-Prerequisites
+## 1. Features
 
-API Keys and Environment Variables
+* **Multi-Website Scraping:** Gathers promotional offers from popular e-commerce sites like Nykaa, Flipkart, Adidas, Puma, and Amazon.
+* **Intelligent Data Storage:** Utilizes a FAISS vector database to store offer embeddings and metadata, enabling efficient semantic search.
+* **Retrieval-Augmented Generation (RAG):** Integrates with OpenAI's LLMs to provide context-aware answers to user queries about offers.
+* **Flexible Querying:** Supports natural language queries, summarization of top deals, and listing offers by specific brands.
+* **CLI Interface:** Allows direct interaction and testing of RAG queries from the command line.
+* **Slackbot Integration:** Provides a convenient way to interact with Promo Sensei directly from Slack, making offer information accessible to teams.
+* **Robust URL Cleaning:** Automatically cleans Flipkart URLs to remove tracking parameters for cleaner links.
 
-Install Dependencies
+## 2. Project Structure
 
-Configuration (config.py)
 
-How It Works
-
-Web Scraping (scraper.py)
-
-Data Ingestion and Vector Database (ingest_to_vector_db.py)
-
-RAG Query Processing (rag_query.py)
-
-Slackbot Integration (slackbot.py)
-
-Usage
-
-Step 1: Ingest Data
-
-Step 2: Run RAG Queries (CLI)
-
-Step 3: Run the Slackbot
-
-Slackbot Commands
-
-Logging
-
-Future Enhancements
-
-1. Features
-Multi-Website Scraping: Gathers promotional offers from popular e-commerce sites like Nykaa, Flipkart, Adidas, Puma, and Amazon.
-
-Intelligent Data Storage: Utilizes a FAISS vector database to store offer embeddings and metadata, enabling efficient semantic search.
-
-Retrieval-Augmented Generation (RAG): Integrates with OpenAI's LLMs to provide context-aware answers to user queries about offers.
-
-Flexible Querying: Supports natural language queries, summarization of top deals, and listing offers by specific brands.
-
-CLI Interface: Allows direct interaction and testing of RAG queries from the command line.
-
-Slackbot Integration: Provides a convenient way to interact with Promo Sensei directly from Slack, making offer information accessible to teams.
-
-Robust URL Cleaning: Automatically cleans Flipkart URLs to remove tracking parameters for cleaner links.
-
-2. Project Structure
 promo-sensei/
 ├── config.py
 ├── ingest_to_vector_db.py
@@ -65,95 +48,85 @@ promo-sensei/
 ├── .env.example
 ├── .env (create this file)
 └── data/
-    ├── faiss_index.bin (generated)
-    └── faiss_index_metadata.pkl (generated)
+├── faiss_index.bin (generated)
+└── faiss_index_metadata.pkl (generated)
 
-3. Initial Setup
-Prerequisites
-Python 3.8+
 
-pip (Python package installer)
+## 3. Initial Setup
 
-Access to OpenAI API
+### Prerequisites
 
-A Slack Workspace (if using the Slackbot)
+* Python 3.8+
+* `pip` (Python package installer)
+* Access to OpenAI API
+* A Slack Workspace (if using the Slackbot)
 
-API Keys and Environment Variables
+### API Keys and Environment Variables
+
 Promo Sensei relies on environment variables for sensitive information like API keys.
 
-Create a .env file: In the root directory of the project, create a file named .env.
+1.  **Create a `.env` file:** In the root directory of the project, create a file named `.env`.
+2.  **Obtain API Keys:**
+    * **OpenAI API Key:**
+        * Go to the [OpenAI API website](https://platform.openai.com/account/api-keys).
+        * Sign in or create an account.
+        * Generate a new secret key.
+        * Copy the key.
+    * **Slack Bot Token & App Token (if using Slackbot):**
+        * Go to [api.slack.com/apps](https://api.slack.com/apps) and click "Create New App".
+        * Choose "From an app manifest" and select your workspace.
+        * Use the following manifest (or adapt as needed). **Ensure the `request_url` for `event_subscriptions` and `interactivity` are updated to your public endpoint if you're not using Socket Mode or `ngrok`. For Socket Mode, these can initially be empty as `slack_bolt` handles the connection.**
+            ```yaml
+            display_information:
+              name: Promo Sensei
+              description: Your AI-powered promotional offer assistant.
+              background_color: "#36C5F0"
+            features:
+              bot_user:
+                display_name: Promo Sensei
+                always_online: false
+              slash_commands:
+                - command: /promosensei
+                  description: Interact with Promo Sensei for offer queries.
+                  usage_hint: "[query | summary | brand <brand_name> | refresh]"
+                  should_escape: false
+            oauth_config:
+              scopes:
+                bot:
+                  - commands
+                  - chat:write
+            settings:
+              event_subscriptions:
+                request_url: "" # This will be set by ngrok or your deployment if not using socket mode
+                bot_events: []
+              interactivity:
+                is_enabled: true
+                request_url: "" # This will be set by ngrok or your deployment if not using socket mode
+              org_deploy_enabled: false
+              socket_mode_enabled: true
+              token_rotation_enabled: false
+            ```
+        * Install the app to your workspace.
+        * Navigate to "Basic Information" -> "Install App" -> "OAuth Tokens for Your Workspace" to find your **Bot User OAuth Token** (starts with `xoxb-`). This is `SLACK_BOT_TOKEN`.
+        * Navigate to "Basic Information" -> "App-Level Tokens" -> "Generate Token and Scopes" to generate an **App-Level Token** (starts with `xapp-`). This is `SLACK_APP_TOKEN`.
+3.  **Add to `.env` file:**
+    ```
+    OPENAI_API_KEY="your_openai_api_key_here"
+    SLACK_BOT_TOKEN="your_slack_bot_token_here"
+    SLACK_APP_TOKEN="your_slack_app_token_here"
+    ```
+    *Replace `"your_openai_api_key_here"`, `"your_slack_bot_token_here"`, and `"your_slack_app_token_here"` with your actual keys.*
 
-Obtain API Keys:
+### Install Dependencies
 
-OpenAI API Key:
-
-Go to the OpenAI API website.
-
-Sign in or create an account.
-
-Generate a new secret key.
-
-Copy the key.
-
-Slack Bot Token & App Token (if using Slackbot):
-
-Go to api.slack.com/apps and click "Create New App".
-
-Choose "From an app manifest" and select your workspace.
-
-Use the following manifest (or adapt as needed):
-
-display_information:
-  name: Promo Sensei
-  description: Your AI-powered promotional offer assistant.
-  background_color: "#36C5F0"
-features:
-  bot_user:
-    display_name: Promo Sensei
-    always_online: false
-  slash_commands:
-    - command: /promosensei
-      description: Interact with Promo Sensei for offer queries.
-      usage_hint: "[query | summary | brand <brand_name> | refresh]"
-      should_escape: false
-oauth_config:
-  scopes:
-    bot:
-      - commands
-      - chat:write
-settings:
-  event_subscriptions:
-    request_url: "" # This will be set by ngrok or your deployment
-    bot_events: []
-  interactivity:
-    is_enabled: true
-    request_url: "" # This will be set by ngrok or your deployment
-  org_deploy_enabled: false
-  socket_mode_enabled: true
-  token_rotation_enabled: false
-
-Install the app to your workspace.
-
-Navigate to "Basic Information" -> "Install App" -> "OAuth Tokens for Your Workspace" to find your Bot User OAuth Token (starts with xoxb-). This is SLACK_BOT_TOKEN.
-
-Navigate to "Basic Information" -> "App-Level Tokens" -> "Generate Token and Scopes" to generate an App-Level Token (starts with xapp-). This is SLACK_APP_TOKEN.
-
-Add to .env file:
-
-OPENAI_API_KEY="your_openai_api_key_here"
-SLACK_BOT_TOKEN="your_slack_bot_token_here"
-SLACK_APP_TOKEN="your_slack_app_token_here"
-
-Replace "your_openai_api_key_here", "your_slack_bot_token_here", and "your_slack_app_token_here" with your actual keys.
-
-Install Dependencies
 Navigate to your project's root directory in your terminal and run:
 
+```bash
 pip install -r requirements.txt
-# (Assuming you have a requirements.txt, if not, install manually)
+# If you don't have a requirements.txt, you can install manually:
 pip install openai faiss-cpu numpy beautifulsoup4 playwright slack_bolt python-dotenv
 playwright install
-playwright install-deps # For Linux users
+playwright install-deps # For Linux users, to install browser dependencies
 
 4. Configuration (config.py)
 The config.py file centralizes all configurable parameters for the application.
@@ -168,15 +141,17 @@ FAISS_DB_PATH: Path to the FAISS index and metadata files. Default: "data/faiss_
 
 LLM_MODEL: The OpenAI model used for RAG queries. Default: "gpt-3.5-turbo".
 
+EMBEDDING_MODEL: The OpenAI model used for generating embeddings. Default: "text-embedding-ada-002".
+
 SCRAPE_URLS: A list of URLs for the scraper to visit. You can enable/disable sites by commenting/uncommenting.
 
 SCRAPE_URLS = [
-    "https://www.nykaa.com/sp/offers-native/offers",
-    "https://www.flipkart.com/offers-store",
-    "https://www.flipkart.com/search?q=beauty+and+cosmetics&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.discount_range_v1%255B%255D%3D70%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D60%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D40%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D=50%2525%2Bor%2Bmore",
-    "https://www.adidas.co.in/offers",
-    "https://in.puma.com/in/en/puma-sale-collection",
-    "https://www.amazon.in/deals"
+    "[https://www.nykaa.com/sp/offers-native/offers](https://www.nykaa.com/sp/offers-native/offers)",
+    "[https://www.flipkart.com/offers-store](https://www.flipkart.com/offers-store)",
+    "[https://www.flipkart.com/search?q=beauty+and+cosmetics&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.discount_range_v1%255B%255D%3D70%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D=60%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%5D=40%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%5D=50%2525%2Bor%2Bmore](https://www.flipkart.com/search?q=beauty+and+cosmetics&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.discount_range_v1%255B%255D%3D70%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D=60%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%5D=40%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%5D=50%2525%2Bor%2Bmore)",
+    "[https://www.adidas.co.in/offers](https://www.adidas.co.in/offers)",
+    "[https://in.puma.com/in/en/puma-sale-collection](https://in.puma.com/in/en/puma-sale-collection)",
+    "[https://www.amazon.in/deals](https://www.amazon.in/deals)"
 ]
 
 Scraper-Specific Limits:
@@ -264,7 +239,7 @@ Socket Mode: Operates in Socket Mode, meaning it doesn't require a public endpoi
 
 Command Handling: Listens for the /promosensei slash command and dispatches to the appropriate RAG query functions based on the command's arguments.
 
-Initial Data Ingestion: On startup, if the FAISS database is empty, it attempts to run the scraper and ingest data. If scraping fails, it falls back to ingesting a set of predefined dummy offers to ensure basic functionality.
+Initial Data Ingestion: On startup, if the FAISS database is empty, it attempts to run the scraper and ingest data. If scraping fails, it falls back to ingesting a set of predefined dummy offers.
 
 CLI Fallback: If Slack tokens are not configured or the Slack connection fails, the bot automatically falls back to a command-line interface (CLI) chatbot for continued testing and interaction.
 
@@ -284,7 +259,7 @@ If the database is empty or needs refreshing, it will call the WebScraper to scr
 
 It then generates embeddings for the scraped offers and ingests them into the FAISS database.
 
-The database files will be saved in the data/ directory. If you want to force a refresh, delete these files before running the script.
+The database files will be saved in the data/ directory. If you want to force a refresh, you can delete these files before running the script.
 
 Step 2: Run RAG Queries (CLI)
 You can test the RAG query processor directly via the command line.
@@ -370,8 +345,4 @@ Additional Website Support: Extend the scraper to include more e-commerce platfo
 
 Advanced Filtering: Implement more sophisticated filtering options for RAG queries (e.g., filter by price range, specific product types).
 
-User Feedback Loop: Allow users to provide feedback on the relevance of LLM responses to improve future performance.
-
-Scheduled Scraping: Implement a scheduler (e.g., using APScheduler) to automatically refresh data at regular intervals.
-
-Deployment: Containerize the application (e.g., with Docker) for easier deployment to cloud platforms.
+**User Feedback
