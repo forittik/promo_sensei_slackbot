@@ -1,5 +1,5 @@
 # Promo Sensei: Your AI-Powered Promotional Offer Assistant
-
+![Alt text for your image](https://github.com/forittik/promo_sensei_slackbot/blob/main/prosensei-slack.png)
 Promo Sensei is an intelligent system designed to scrape promotional offers from various e-commerce websites, store them in a vector database, and provide an interface (via CLI or Slackbot) to query, summarize, and retrieve these offers using a Large Language Model (LLM) with Retrieval-Augmented Generation (RAG).
 
 ---
