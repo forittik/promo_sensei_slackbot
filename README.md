@@ -161,9 +161,8 @@ SCRAPE_URLS = [
 - `FLIPKART_MAX_PAGES = 2`: Maximum number of Flipkart pagination pages (for search results) to scrape. Set to 0 for unlimited.
 - `ADIDAS_MAX_PAGES = 2`: Maximum number of Adidas pagination pages to scrape. (Note: Adidas scraping logic in scraper.py currently iterates directly on product cards, so this variable might not be fully utilized for pagination, but it's defined).
 - `MAX_OFFERS_PER_SITE = 5`: For Amazon, to set how many offers to scrape.
-  *These define a random delay between scraping actions to avoid being blocked by websites.*
-- `SCRAPE_DELAY_MIN_SECONDS = 1`
-- `SCRAPE_DELAY_MAX_SECONDS = 3`: 
+- `SCRAPE_DELAY_MIN_SECONDS = 1`: These define a minimum random delay between scraping actions to avoid being blocked by websites.
+- `SCRAPE_DELAY_MAX_SECONDS = 3`: These define a maximum random delay between scraping actions to avoid being blocked by websites.
 
 ---
 
