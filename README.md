@@ -24,6 +24,8 @@ Promo Sensei is an intelligent system designed to scrape promotional offers from
 - [Slackbot Commands](#slackbot-commands)
 - [Logging](#logging)
 - [Future Enhancements](#future-enhancements)
+- [Key Design Decisions](#key-design-decisions)
+- [Sample Queries & Outputs](#sample-queries-outputs)
 
 ---
 
@@ -217,6 +219,17 @@ This module enables interaction with Promo Sensei via Slack.
 
 ---
 
+## Key Design Decisions
+
+### Retrieval-Augmented Generation (RAG) + LLM Integration
+- **RAG Architecture:** The system uses a two-step Retrieval-Augmented Generation approach. First, it retrieves the most relevant offers from the FAISS vector database using semantic search on OpenAI embeddings. Then, it augments the user query with these retrieved offers as context for the LLM.
+- **LLM Prompting:** The LLM (OpenAI GPT model) is prompted with a system message that defines its persona ("Promo Sensei") and instructs it to answer concisely, prioritize active offers, and format links as Markdown.
+- **Separation of Retrieval and Generation:** By separating retrieval (vector search) from generation (LLM), the system ensures that responses are both contextually relevant and grounded in the latest scraped data.
+- **URL Cleaning:** Flipkart URLs are cleaned to remove tracking parameters before being presented to the user or LLM, ensuring shareable and user-friendly links.
+- **Fallbacks:** If scraping or database access fails, the system can fall back to dummy data, ensuring robustness for demos and development.
+
+---
+
 ## Usage
 
 ### Step 1: Ingest Data
@@ -294,6 +307,60 @@ Example Response: "Here are the promotional offers for the brand 'Nykaa': Offer 
 This command will trigger a fresh scrape and re-ingestion of data into the vector database. This can take some time depending on the number of URLs configured.
 
 Example Response: "Refreshing promotional offers data. This might take a moment..."
+
+---
+
+## Sample Queries & Outputs
+
+### Input 1
+```
+@promosensei List 5 active promotional offers
+```
+**Output 1:**
+Here are 5 active promotional offers from Flipkart:
+
+1. **Offer Title**: Moto Edge 50 Fusion  
+   **Description**: Incl All Offers | Price: From ₹22,999  
+   **Brand**: Flipkart  
+   **Expiry Date**: None  
+   [View Offer](https://www.flipkart.com/tyy/4io/~cs-hvkos6p34k/pr?sid=tyy%2C4io&collection-tab-name=Motorola+Edge50+Fusion)
+2. **Offer Title**: Holders are here  
+   **Description**: Grab Now | Price: From ₹99  
+   **Brand**: Flipkart  
+   **Expiry Date**: None  
+   [View Offer](https://www.flipkart.com/mobile-accessories/mobile-holders/pr?sid=tyy%2C4mr%2Cvnf)
+3. **Offer Title**: moto g64 5G  
+   **Description**: Incl All Offers | Price: Just ₹12,999  
+   **Brand**: Flipkart  
+   **Expiry Date**: None  
+   [View Offer](https://www.flipkart.com/tyy/4io/~cs-gx0yuchgjb/pr?sid=tyy%2C4io&collection-tab-name=Motorola+g64+5G)
+4. **Offer Title**: Smart Home Devices  
+   **Description**: CP PLUS, LP-Link & more | Price: From ₹399  
+   **Brand**: Flipkart  
+   **Expiry Date**: None  
+   [View Offer](https://www.flipkart.com/automation-robotics/pr?sid=igc)
+5. **Offer Title**: TV Units  
+   **Description**: By Flipkart Perfect Home .... | Price: From ₹1,249  
+   **Brand**: Flipkart  
+   **Expiry Date**: None  
+   [View Offer](https://www.flipkart.com/furniture/tv-units-cabinets/tv-entertainment-units/pr?sid=wwe%2C243%2Ckoe)
+
+### Input 2
+```
+/promosensei search List 3 offers by nykaa
+```
+**Output 2:**
+Here are three active products by Nykaa:
+
+1. **Nykaa Cosmetics Eyes On Me! 4 In 1 Quad Eyeshadow Palette**  
+   Original Price: MRP:₹375, Offer Price: ₹263  
+   [View Offer](https://www.nykaa.com/bestsellers/c/15752?&eq=desktop&discount_range_filter=30-*&transaction_id=75487feecda2f77390de0a7057cb09b1&intcmp=nykaa:sp:offers-native:offers:main-banner:CAROUSEL_V2:1:offers%20page%20banner:-1:75487feecda2f77390de0a7057cb09b1&page_no=1)
+2. **Nykaa Cosmetics So Creme! Creamy Matte Lipstick**  
+   Original Price: MRP:₹329, Offer Price: ₹230  
+   [View Offer](https://www.nykaa.com/bestsellers/c/15752?&eq=desktop&discount_range_filter=30-*&transaction_id=75487feecda2f77390de0a7057cb09b1&intcmp=nykaa:sp:offers-native:offers:main-banner:CAROUSEL_V2:1:offers%20page%20banner:-1:75487feecda2f77390de0a7057cb09b1&page_no=1)
+3. **Nykaa Cosmetics Eyes On Me! 10-in-1 Eyeshadow Palette**  
+   Original Price: MRP:₹699, Offer Price: ₹489  
+   [View Offer](https://www.nykaa.com/bestsellers/c/15752?&eq=desktop&discount_range_filter=30-*&transaction_id=75487feecda2f77390de0a7057cb09b1&intcmp=nykaa:sp:offers-native:offers:main-banner:CAROUSEL_V2:1:offers%20page%20banner:-1:75487feecda2f77390de0a7057cb09b1&page_no=2)
 
 ---
 
