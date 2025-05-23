@@ -240,6 +240,15 @@ Run the scraper to collect promotional offers from the configured websites.
 python scraper.py
 ```
 
+This script will:
+- Use Playwright for asynchronous headless browser automation to visit the URLs defined in `config.py`.
+- Apply specific scraping logic tailored for each supported e-commerce site (Nykaa, Flipkart Offers Store, Flipkart Search Results, Adidas, Puma, and Amazon Deals).
+- Extract detailed information for each offer, including title, description, original and offer prices, discounts, free gifts, product/offer links, and sometimes brand or campaign information.
+- Implement pagination handling for sites like Nykaa and Flipkart search results based on the configured maximum page limits.
+- Include a basic generic scraping function as a fallback if site-specific selectors do not yield results.
+- Attempt to parse potential expiry dates from the scraped text using predefined formats and keywords.
+- Save all the collected promotional offer data into a JSON file named `scraped_offers.json` in the project root directory.
+
 ### Step 2: Ingest Data
 Before you can query offers, you need to ingest the scraped data into the vector database.
 
