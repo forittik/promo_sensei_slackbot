@@ -18,9 +18,10 @@ Promo Sensei is an intelligent system designed to scrape promotional offers from
   - [RAG Query Processing (`rag_query.py`)](#rag-query-processing-rag_querypy)
   - [Slackbot Integration (`slackbot.py`)](#slackbot-integration-slackbotpy)
 - [Usage](#usage)
-  - [Step 1: Ingest Data](#step-1-ingest-data)
-  - [Step 2: Run RAG Queries (CLI)](#step-2-run-rag-queries-cli)
-  - [Step 3: Run the Slackbot](#step-3-run-the-slackbot)
+  - [Step 1: Web Scraping](#step-1-web-scraping)
+  - [Step 2: Ingest Data](#step-2-ingest-data)
+  - [Step 3: Run RAG Queries (CLI)](#step-3-run-rag-queries-cli)
+  - [Step 4: Run the Slackbot](#step-4-run-the-slackbot)
 - [Slackbot Commands](#slackbot-commands)
 - [Logging](#logging)
 - [Future Enhancements](#future-enhancements)
@@ -232,8 +233,15 @@ This module enables interaction with Promo Sensei via Slack.
 
 ## Usage
 
-### Step 1: Ingest Data
-Before you can query offers, you need to scrape and ingest data into the vector database.
+### Step 1: Web Scraping
+Run the scraper to collect promotional offers from the configured websites.
+
+```bash
+python scraper.py
+```
+
+### Step 2: Ingest Data
+Before you can query offers, you need to ingest the scraped data into the vector database.
 
 ```bash
 python ingest_to_vector_db.py
@@ -246,7 +254,7 @@ This script will:
 - It then generates embeddings for the scraped offers and ingests them into the FAISS database.
 - The database files will be saved in the `data/` directory. If you want to force a refresh, you can delete these files before running the script.
 
-### Step 2: Run RAG Queries (CLI)
+### Step 3: Run RAG Queries (CLI)
 You can test the RAG query processor directly via the command line.
 
 ```bash
@@ -264,7 +272,7 @@ This script will:
   - List offers by brand: Nike (demonstrates no offers found)
 - You can modify the `if __name__ == "__main__":` block in `rag_query.py` to add your own test queries.
 
-### Step 3: Run the Slackbot
+### Step 4: Run the Slackbot
 To run the Slackbot, ensure your `.env` file is correctly configured with Slack tokens.
 
 ```bash
