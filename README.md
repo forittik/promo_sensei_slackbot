@@ -142,7 +142,7 @@ The `config.py` file centralizes all configurable parameters for the application
 - `SLACK_APP_TOKEN`: Your Slack app token (loaded from .env).
 - `FAISS_DB_PATH`: Path to the FAISS index and metadata files. Default: `data/faiss_index`.
 - `LLM_MODEL`: The OpenAI model used for RAG queries. Default: `gpt-3.5-turbo`.
-- `EMBEDDING_MODEL`: The OpenAI model used for generating embeddings. Default: `text-embedding-ada-002`.
+- `EMBEDDING_MODEL`: The OpenAI model used for generating embeddings. Default: `text-embedding-3-small`.
 - `SCRAPE_URLS`: A list of URLs for the scraper to visit. You can enable/disable sites by commenting/uncommenting.
 
 ```python
@@ -161,7 +161,7 @@ SCRAPE_URLS = [
 - `FLIPKART_MAX_PAGES = 2`: Maximum number of Flipkart pagination pages (for search results) to scrape. Set to 0 for unlimited.
 - `ADIDAS_MAX_PAGES = 2`: Maximum number of Adidas pagination pages to scrape. (Note: Adidas scraping logic in scraper.py currently iterates directly on product cards, so this variable might not be fully utilized for pagination, but it's defined).
 - `MAX_OFFERS_PER_SITE = 5`: For Amazon, to set how many offers to scrape.
-  These define a random delay between scraping actions to avoid being blocked by websites.
+  *These define a random delay between scraping actions to avoid being blocked by websites.*
 - `SCRAPE_DELAY_MIN_SECONDS = 1`
 - `SCRAPE_DELAY_MAX_SECONDS = 3`: 
 
