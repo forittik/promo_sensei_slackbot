@@ -17,11 +17,10 @@ FAISS_DB_PATH = "data/faiss_index"
 
 SCRAPE_URLS = [
     # "https://www.nykaa.com/sp/offers-native/offers",
-    # "https://www.flipkart.com/offers-store",
+     "https://www.flipkart.com/offers-store",
     # "https://www.flipkart.com/search?q=beauty+and+cosmetics&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.discount_range_v1%255B%255D%3D70%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D60%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D40%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D50%2525%2Bor%2Bmore&p%5B%5D=facets.discount_range_v1%255B%255D%3D30%2525%2Bor%2Bmore&page=1",
     # "https://www.adidas.co.in/offers",
-    # "https://in.puma.com/in/en/deals?offset=24",
-     "https://www.amazon.in/deals?ref_=nav_cs_gb",
+    #"https://www.amazon.in/deals?ref_=nav_cs_gb",
 ]
 
 
