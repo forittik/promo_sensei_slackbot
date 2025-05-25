@@ -26,7 +26,7 @@ Promo Sensei is an intelligent system designed to scrape promotional offers from
 - [Logging](#logging)
 - [Future Enhancements](#future-enhancements)
 - [Key Design Decisions](#key-design-decisions)
-- [Sample Queries & Outputs](#sample-queries-&-outputs)
+- [Sample Queries & Outputs](#sample-queries-and-outputs)
 
 ---
 
@@ -327,7 +327,7 @@ Example Response: "Refreshing promotional offers data. This might take a moment.
 
 ---
 
-## Sample Queries & Outputs
+## Sample Queries And Outputs
 
 ### Input 1
 ```
