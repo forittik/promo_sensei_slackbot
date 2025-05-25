@@ -37,7 +37,7 @@ Promo Sensei is an intelligent system designed to scrape promotional offers from
 - **Flexible Querying:** Supports natural language queries, summarization of top deals, and listing offers by specific brands.
 - **CLI Interface:** Allows direct interaction and testing of RAG queries from the command line.
 - **Slackbot Integration:** Provides a convenient way to interact with Promo Sensei directly from Slack, making offer information accessible to teams.
-- **Robust URL Cleaning:** Automatically cleans Flipkart URLs to remove tracking parameters for cleaner links.
+- **Robust URL Cleaning:** Automatically cleans Flipkart URLs to remove tracking parameters for cleaner links .
 
 ---
 
