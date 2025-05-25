@@ -98,18 +98,34 @@ features:
 oauth_config:
   scopes:
     bot:
-      - commands
+      - app_mentions:read
+      - channels:history
+      - channels:read
       - chat:write
+      - commands
+      - groups:history
+      - groups:read
+      - im:history
+      - im:read
+      - im:write
 settings:
   event_subscriptions:
     request_url: "" # Set by ngrok or your deployment if not using socket mode
-    bot_events: []
+    bot_events:
+      - app_mention
+      - message.channels
+      - message.groups
+      - message.im
   interactivity:
     is_enabled: true
     request_url: "" # Set by ngrok or your deployment if not using socket mode
   org_deploy_enabled: false
   socket_mode_enabled: true
   token_rotation_enabled: false
+  app_token_scopes:
+    - authorizations:read
+    - connections:write
+    - app_configurations:write
 ```
 
 - Install the app to your workspace.
