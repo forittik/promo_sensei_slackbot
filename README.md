@@ -26,7 +26,7 @@ Promo Sensei is an intelligent system designed to scrape promotional offers from
 - [Logging](#logging)
 - [Future Enhancements](#future-enhancements)
 - [Key Design Decisions](#key-design-decisions)
-- [Sample Queries & Outputs](#sample-queries-outputs)
+- [Sample Queries & Outputs](#sample-queries-&-outputs)
 
 ---
 
