@@ -23,6 +23,7 @@ SCRAPE_URLS = [
     #"https://www.amazon.in/deals?ref_=nav_cs_gb",
 ]
 
+#For Flipkart, you can replace "beauty+and+cosmetics" with any product name, and it will work as is. Eg- Mobile
 
 OFFER_DETAILS_SCHEMA = {
     "title": None,
